@@ -1,0 +1,2 @@
+# SetupArch
+SetupArchScript
