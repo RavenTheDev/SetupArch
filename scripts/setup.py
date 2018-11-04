@@ -20,7 +20,9 @@ input('>> ')
 
 os.system('yay -S snapd')
 os.system('systemctl enable snapd --now')
-os.system('snap install bitwarden powershell slack spotify discord nextcloud-client mailspring')
+os.system('snap install bitwarden spotify discord nextcloud-client mailspring')
+os.system('snap install powershell --classic')
+os.system('snap install slack --classic')
 
 print('Setup NBFC')
 os.system('yay -S nbfc')
