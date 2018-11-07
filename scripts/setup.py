@@ -1,77 +1,110 @@
 # An interactive version of the install script
 
 import os
-import sys
 import time
+import sys
 
-
-def header():
-
-    print("-" * 50)
-    print("Arch Installation and Management")
-    notify_clear_or_not()
-    print("-" * 50)
-
-
-def notify_clear_or_not():
+def setup_app():
+    """
+    This module sets up the app with the require settings are boot time
+    """
     global clear_input
-    if clear_input == "yes":
-        print("Clear on Input is On")
-    if clear_input != "yes":
-        print("Clear on Input is Off")
+    clear_input = "yes"  # Set Clear on Input to ENABLED by Default
 
+    header_main()
 
-def clear_or_not():
-    global clear_input
-    if clear_input == "yes":
-        clear()
-    else:
-        pass
-
-
-def header_options():
-
-    print("-" * 50)
-    print("Arch Installation and Management - Options")
-    notify_clear_or_not()
-    print("-" * 50)
-
-
-def header_devicemenu():
-    print("-" * 50)
-    print("Arch Installation and Management")
-    print("DEVICE MANAGEMENT")
-    notify_clear_or_not()
-    print("-" * 50)
-
-
-def clear():
-    os.system("clear")
-
-
-def intro():
-    clear()
-    global clear_input
-    clear_input = "no"  # Set Clear on Input to DISABLED by Default
-    header()
     print(
         "\nWelcome to RavenTheDev's ArchLInux installation and configuration script\n"
     )
+
     print(
-        "This application will assist with setup of Archlinux (or Arch Bases Systems) on new systems.\n"
+        "This application will assist with setup of Archlinux (or Arch Based Systems) on new systems.\n \n"
         "The application will allow you to install most recommended software (user customizable) and "
-        "allow viewing of system resources and settings"
+        "allow viewing of system resources and settings\n \n \n"
     )
-    input("\n \nPress any key to continue ...")
-    time.sleep(0.1)
+
+    print("|---------------------- IMPORTANT ---------------------- |\n")
+
+    print("Before running this application, please ensure you have Arch-Chroot")
+    print("(or equivalent) into the OS environment, so that the script can run against the new install.")
+    print("I take no responsibility for any damage done to your system\n")
 
 
-def menu():
+    print("|---------------------- IMPORTANT ---------------------- |")
+
+    input("\n Press any key to continue ...")
+    
     time.sleep(0.1)
-    clear()
-    print("Loading Application . . . ")
-    print("Memory Loaded . . . \n")
-    header()
+
+# Methods for the Display of Different Headers
+def header_main():
+    """
+    This method prints the pre-defined Header on each menu page
+    """
+    clear_screen()
+    print("-" * 50)
+    print("Arch Installation and Management")
+    disp_clear_screen()
+    print("-" * 50)
+
+def header_options():
+    """
+    Print the Header for the Options Page
+    """
+    clear_screen()
+    print("-" * 50)
+    print("Arch Installation and Management - Options")
+    disp_clear_screen()
+    print("-" * 50)
+
+def header_devicemenu():
+    """
+    Print the header for the Device Management page
+    """
+    clear_screen()
+    print("-" * 50)
+    print("Arch Installation and Management")
+    print("DEVICE MANAGEMENT")
+    disp_clear_screen()
+    print("-" * 50)
+
+# Methods fo the "Clear Screen" options
+def disp_clear_screen():
+    """
+    Display the "Clear on Input" status
+    """
+    global clear_input
+    if clear_input == "yes":
+        print("Clear Screen is On")
+    if clear_input != "yes":
+        print("Clear Screen is Off")
+
+def clear_screen():
+    """
+    Clear the Screen if "Clear on Input" is turned ON
+    """
+    global clear_input
+    if clear_input == "yes":
+        os.system('clear')
+    else:
+        pass
+
+def toggle_clear_on_input():
+    """
+    Toggle the "Clear on Input" option
+    """
+    global clear_input
+    if clear_input == "yes":
+        clear_input = "no"
+    else:
+        clear_input = "yes"
+
+# Methods for displaying the different Menu choices
+def main_menu():
+    """
+    Launch the Main Menu
+    """
+    header_main()
     print("Please choose an option \n")
 
     # The Menu Options
@@ -92,7 +125,7 @@ def menu():
 
     # Install Base System
     if choice == "1":
-        clear_or_not()
+        disp_clear_screen()
         print("Installing system software . . . please wait")
         os.system(
             "for x in $(cat package_list.txt); do sudo pacman -S $x --noconfirm >/dev/null 2>&1; done;"
@@ -100,7 +133,7 @@ def menu():
 
     # Setup and Enable Services
     if choice == "2":
-        clear_or_not()
+        disp_clear_screen()
         print("Enabling Services . . . please wait")
         os.system("sudo systemctl enable sddm")
         os.system("sudo systemctl enable tlp")
@@ -118,13 +151,13 @@ def menu():
 
     # Install AUR Packages
     if choice == "4":
-        clear_or_not()
+        disp_clear_screen()
         print("Installing AUR Packages . . . please wait")
         os.system("yay -S qownnotes")
 
     # Install SNAP Packages
     if choice == "5":
-        clear_or_not()
+        disp_clear_screen()
         print("Installing SNAP Packages . . . please wait")
         os.system("systemctl enable snapd --now")
         os.system("snap install bitwarden spotify discord nextcloud-client mailspring")
@@ -133,7 +166,7 @@ def menu():
 
     # Setup NBFC
     if choice == "6":
-        clear_or_not()
+        disp_clear_screen()
         print("Setup NBFC . . . please wait")
         os.system("yay -S nbfc")
         os.system("systemctl service nbfc enable --now")
@@ -147,7 +180,7 @@ def menu():
 
     # Setup Oh-My-ZSH
     if choice == "7":
-        clear_or_not()
+        disp_clear_screen()
 
         print("Setup ZSH. . . please wait")
         os.system(
@@ -156,27 +189,33 @@ def menu():
 
     if choice == "8":
         time.sleep(0.2)
-        clear()
         menu_disk()
 
     if choice == "0":
-        clear()
+        os.system('clear')
         sys.exit()
 
     if choice == "M" or "m":
         menu_options()
 
-    else:
-        clear()
+    if choice == "":
+        clear_screen()
         print("Invalid Option Chosen. Please try again")
         input("Press Enter to Continue")
-        menu()
+        main_menu()
 
-    clear()
-    menu()
+    else:
+        clear_screen()
+        print("Invalid Option Chosen. Please try again")
+        input("Press Enter to Continue")
+        main_menu()
 
+    main_menu()
 
 def menu_disk():
+    """
+    Launch the Disk Management Menu
+    """
     time.sleep(0.1)
     header_devicemenu()
     print("Please choose an option \n")
@@ -190,47 +229,32 @@ def menu_disk():
     choice = input("\n Enter your choice: ")
 
     if choice == "1":
-        clear_or_not()
         header_devicemenu()
-        print("Disks found:")
+        print("Disks found:\n")
         os.system("lsblk")
-        input("Press any key to return to menu\n")
-        clear_or_not()
+        input("\nPress any key to return to menu\n")
+        disp_clear_screen()
         menu_disk()
 
     if choice == "2":
-        clear_or_not()
         header_devicemenu()
-        print("Hard Drive Space:")
+        print("Hard Drive Space:\n")
         os.system("df -h -t ext4")
-        input("Press any key to return to menu\n")
-        clear_or_not()
+        input("\nPress any key to return to menu\n")
         menu_disk()
 
     if choice == "3":
-        clear_or_not()
         header_devicemenu()
-        print("Free memory:")
+        print("Free memory:\n")
         os.system("free -h -l")
-        input("Press any key to return to menu\n")
-        clear_or_not()
+        input("\nPress any key to return to menu\n")
         menu_disk()
 
     if choice == "0":
-        menu()
-
-
-def toggle_clear_or_not():
-    global clear_input
-    if clear_input == "yes":
-        clear_input = "no"
-    else:
-        clear_input = "yes"
-
+        main_menu()
 
 def menu_options():
     time.sleep(0.1)
-    clear()
     header_options()
     print("Please choose an option \n")
 
@@ -241,10 +265,10 @@ def menu_options():
     choice = input("\n Enter your choice: ")
 
     if choice == "1":
-        toggle_clear_or_not()
+        toggle_clear_on_input()
         menu_options()
 
-
-# Run the main program
-intro()
-menu()
+# ------------------------------------------------------------------- #
+# Run the Main Application under this line
+setup_app()
+main_menu()
